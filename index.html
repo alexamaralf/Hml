@@ -8,28 +8,53 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      background: #fdf5f8;
       margin: 0;
       padding: 0;
+    }
+    header {
+      background: #6a1b9a;
+      color: #fff;
+      padding: 15px 30px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    header button {
+      background: #fff;
+      color: #6a1b9a;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    header button:hover {
+      background: #eee;
     }
     .container {
-      background: #fff;
+      max-width: 900px;
+      margin: 20px auto;
       padding: 20px;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    h2 { text-align: center; }
+    h2, h3 { text-align: center; }
     input, select, button {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
       border-radius: 8px;
       border: 1px solid #ccc;
+      font-size: 15px;
     }
     button {
       background: #6a1b9a;
@@ -41,32 +66,41 @@
       background: #4a148c;
     }
     .hidden { display: none; }
+    .horarios-lista {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .horarios-lista label {
+      background: #f3e5f5;
+      border: 1px solid #6a1b9a;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    .horarios-lista input {
+      margin-right: 5px;
+    }
+    .imagem-topo {
+      display: block;
+      margin: 0 auto 20px auto;
+      max-width: 200px;
+      border-radius: 12px;
+    }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Beleza & Sobrancelhas</h1>
+    <button onclick="toggleAdmin()">Área do Admin</button>
+  </header>
+
   <div class="container">
-    <h2>Agendamento de Sobrancelhas</h2>
-
-    <!-- Login Admin -->
-    <div id="loginArea">
-      <h3>Login Admin</h3>
-      <input type="password" id="adminPass" placeholder="Senha do admin">
-      <button onclick="loginAdmin()">Entrar</button>
-    </div>
-
-    <!-- Área Admin -->
-    <div id="adminArea" class="hidden">
-      <h3>Disponibilizar horários</h3>
-      <input type="date" id="adminDate">
-      <input type="time" id="adminTime">
-      <button onclick="addHorario()">Adicionar Horário</button>
-      <div id="horariosDisponiveis"></div>
-      <button onclick="logoutAdmin()">Sair</button>
-    </div>
+    <img class="imagem-topo" src="https://cdn.pixabay.com/photo/2016/11/29/06/18/makeup-1866556_1280.jpg" alt="Estética e sobrancelhas">
 
     <!-- Área Usuário -->
-    <div id="userArea" class="hidden">
-      <h3>Agendar</h3>
+    <div id="userArea">
+      <h2>Agende seu horário</h2>
       <input type="text" id="nome" placeholder="Seu nome">
       <input type="tel" id="telefone" placeholder="Seu telefone">
       <input type="date" id="data">
@@ -74,13 +108,44 @@
       <button onclick="reservar()">Reservar</button>
       <div id="msg"></div>
     </div>
+
+    <!-- Área Admin -->
+    <div id="adminArea" class="hidden">
+      <h2>Painel do Administrador</h2>
+      <div id="loginArea">
+        <h3>Login</h3>
+        <input type="password" id="adminPass" placeholder="Senha do admin">
+        <button onclick="loginAdmin()">Entrar</button>
+      </div>
+
+      <div id="adminPanel" class="hidden">
+        <h3>Disponibilizar horários</h3>
+        <input type="date" id="adminDate">
+
+        <div class="horarios-lista">
+          <!-- checkboxes de horários padrão -->
+          <label><input type="checkbox" value="09:00">09:00</label>
+          <label><input type="checkbox" value="10:00">10:00</label>
+          <label><input type="checkbox" value="11:00">11:00</label>
+          <label><input type="checkbox" value="13:00">13:00</label>
+          <label><input type="checkbox" value="14:00">14:00</label>
+          <label><input type="checkbox" value="15:00">15:00</label>
+          <label><input type="checkbox" value="16:00">16:00</label>
+          <label><input type="checkbox" value="17:00">17:00</label>
+        </div>
+
+        <button onclick="addHorarios()">Adicionar Selecionados</button>
+        <div id="horariosDisponiveis"></div>
+        <button onclick="logoutAdmin()">Sair</button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 🔥 Configuração do Firebase (troque pelas suas chaves!)
+    // 🔥 Configuração Firebase (troque pelas suas credenciais)
     const firebaseConfig = {
       apiKey: "SUA-API-KEY",
       authDomain: "SEU-PROJETO.firebaseapp.com",
@@ -90,18 +155,22 @@
       appId: "1:123456789:web:abcdef123456"
     };
 
-    // Inicializa Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const adminPassword = "1234"; // senha simples
+    const adminPassword = "1234";
 
-    // ---- Login ----
+    // Mostrar/ocultar área admin
+    window.toggleAdmin = function() {
+      document.getElementById("adminArea").classList.toggle("hidden");
+    };
+
+    // Login
     window.loginAdmin = function() {
       const pass = document.getElementById("adminPass").value;
       if (pass === adminPassword) {
         document.getElementById("loginArea").classList.add("hidden");
-        document.getElementById("adminArea").classList.remove("hidden");
+        document.getElementById("adminPanel").classList.remove("hidden");
         carregarHorarios();
       } else {
         alert("Senha incorreta!");
@@ -109,32 +178,35 @@
     };
 
     window.logoutAdmin = function() {
-      document.getElementById("adminArea").classList.add("hidden");
       document.getElementById("loginArea").classList.remove("hidden");
+      document.getElementById("adminPanel").classList.add("hidden");
     };
 
-    // ---- Admin adiciona horário ----
-    window.addHorario = async function() {
+    // Adicionar vários horários de uma vez
+    window.addHorarios = async function() {
       const data = document.getElementById("adminDate").value;
-      const hora = document.getElementById("adminTime").value;
+      const checkboxes = document.querySelectorAll(".horarios-lista input:checked");
 
-      if (!data || !hora) {
-        alert("Selecione data e hora!");
+      if (!data || checkboxes.length === 0) {
+        alert("Selecione uma data e pelo menos um horário!");
         return;
       }
 
-      await addDoc(collection(db, "horarios"), {
-        data: data,
-        hora: hora,
-        disponivel: true
-      });
+      for (let cb of checkboxes) {
+        await addDoc(collection(db, "horarios"), {
+          data: data,
+          hora: cb.value,
+          disponivel: true
+        });
+        cb.checked = false;
+      }
 
       carregarHorarios();
     };
 
     async function carregarHorarios() {
       let div = document.getElementById("horariosDisponiveis");
-      div.innerHTML = "<h4>Horários Cadastrados:</h4>";
+      div.innerHTML = "<h4>Horários cadastrados:</h4>";
 
       const q = await getDocs(collection(db, "horarios"));
       q.forEach(docSnap => {
@@ -143,7 +215,7 @@
       });
     }
 
-    // ---- Usuário reserva horário ----
+    // Reserva
     window.reservar = async function() {
       const nome = document.getElementById("nome").value;
       const telefone = document.getElementById("telefone").value;
@@ -155,7 +227,6 @@
         return;
       }
 
-      // Verifica se horário está disponível
       const q = query(collection(db, "horarios"), where("data", "==", data), where("hora", "==", hora), where("disponivel", "==", true));
       const snap = await getDocs(q);
 
@@ -197,9 +268,6 @@
         select.add(opt);
       });
     }
-
-    // Mostra a área do usuário por padrão
-    document.getElementById("userArea").classList.remove("hidden");
   </script>
 </body>
 </html>
