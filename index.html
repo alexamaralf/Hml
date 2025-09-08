@@ -3,229 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agendamento de Sobrancelhas</title>
+  <title>Login Admin - Agendamento</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
+      margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fdfdfd;
-      color: #333;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    header {
-      background: #b76e79;
-      color: white;
-      padding: 1rem;
+    .login-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      max-width: 350px;
+      width: 100%;
       text-align: center;
-      position: relative;
     }
 
-    header h1 {
-      margin: 0;
+    .login-card h2 {
+      margin-bottom: 1.5rem;
       font-size: 1.8rem;
-    }
-
-    #adminBtn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: white;
-      color: #b76e79;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 1rem;
-    }
-
-    h2 {
-      margin-top: 2rem;
-      color: #b76e79;
+      color: #333;
     }
 
     .form-group {
       margin-bottom: 1rem;
+      text-align: left;
     }
 
-    input, select, button, textarea {
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      color: #444;
+    }
+
+    .form-group input {
       width: 100%;
-      padding: 0.7rem;
-      border: 1px solid #ccc;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
       border-radius: 8px;
       font-size: 1rem;
     }
 
-    button {
-      background: #b76e79;
+    .form-group input:focus {
+      border-color: #6a11cb;
+      outline: none;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
       color: white;
       font-weight: bold;
+      font-size: 1rem;
       cursor: pointer;
-      border: none;
+      margin-top: 0.5rem;
     }
 
-    button:hover {
-      background: #a45d68;
+    .login-btn:hover {
+      opacity: 0.9;
     }
 
-    .avisos {
-      background: #fff3cd;
-      padding: 1rem;
-      border: 1px solid #ffeeba;
-      border-radius: 8px;
-      margin-top: 1rem;
+    .forgot {
+      text-align: right;
+      margin-top: 0.3rem;
     }
 
-    .portifolio {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-top: 1rem;
-    }
-
-    .portifolio img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    footer {
-      margin-top: 2rem;
-      background: #b76e79;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
-
-    .social {
-      margin-top: 1rem;
-    }
-
-    .social a {
-      margin: 0 10px;
-      font-size: 1.5rem;
-      color: white;
+    .forgot a {
+      font-size: 0.8rem;
+      color: #6a11cb;
       text-decoration: none;
     }
 
-    .social a:hover {
-      color: #ffe4ec;
+    .social-login {
+      margin-top: 1.5rem;
     }
 
-    /* Responsividade */
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.4rem;
-      }
-      input, select, button {
-        font-size: 0.9rem;
+    .social-login p {
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: #666;
+    }
+
+    .social-icons a {
+      margin: 0 8px;
+      font-size: 1.5rem;
+      color: #555;
+      text-decoration: none;
+    }
+
+    .social-icons a:hover {
+      color: #6a11cb;
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        margin: 0 1rem;
+        padding: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Agende sua Sobrancelha</h1>
-    <button id="adminBtn">Admin</button>
-  </header>
+  <div class="login-card">
+    <h2>Login</h2>
+    <div class="form-group">
+      <label for="username">Usuário</label>
+      <input type="text" id="username" placeholder="Digite seu usuário">
+    </div>
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input type="password" id="password" placeholder="Digite sua senha">
+    </div>
+    <div class="forgot">
+      <a href="#">Esqueceu a senha?</a>
+    </div>
+    <button class="login-btn" onclick="loginAdmin()">LOGIN</button>
 
-  <div class="container">
-    <!-- Área de Avisos -->
-    <div class="avisos">
-      <h3>📢 Avisos</h3>
-      <p>Promoção desta semana: faça sobrancelha e ganhe desconto em design!</p>
-    </div>
-
-    <!-- Formulário de agendamento -->
-    <h2>Reserve seu horário</h2>
-    <div class="form-group">
-      <input type="text" id="nome" placeholder="Seu nome">
-    </div>
-    <div class="form-group">
-      <input type="tel" id="telefone" placeholder="Seu telefone">
-    </div>
-    <div class="form-group">
-      <input type="date" id="data">
-    </div>
-    <div class="form-group">
-      <select id="horario"></select>
-    </div>
-    <button onclick="reservar()">Reservar</button>
-
-    <!-- Portfólio -->
-    <h2>Portfólio</h2>
-    <div class="portifolio">
-      <img src="https://via.placeholder.com/200x200?text=Trabalho+1" alt="Trabalho 1">
-      <img src="https://via.placeholder.com/200x200?text=Trabalho+2" alt="Trabalho 2">
-      <img src="https://via.placeholder.com/200x200?text=Trabalho+3" alt="Trabalho 3">
+    <div class="social-login">
+      <p>Ou entre com</p>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-google"></i></a>
+      </div>
     </div>
   </div>
 
-  <footer>
-    <p>© 2025 Studio de Sobrancelhas</p>
-    <div class="social">
-      <a href="https://wa.me/5599999999999" target="_blank"><i class="fab fa-whatsapp"></i></a>
-      <a href="https://instagram.com/seuinsta" target="_blank"><i class="fab fa-instagram"></i></a>
-    </div>
-  </footer>
-
-  <!-- Firebase e Scripts -->
+  <!-- Firebase (Auth) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
   <script>
     // Configuração Firebase (substitua pelos seus dados)
     const firebaseConfig = {
       apiKey: "SUA_APIKEY",
       authDomain: "SEU_PROJECT.firebaseapp.com",
-      databaseURL: "https://SEU_PROJECT.firebaseio.com",
       projectId: "SEU_PROJECT",
       storageBucket: "SEU_PROJECT.appspot.com",
       messagingSenderId: "ID",
       appId: "APP_ID"
     };
+
     const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const auth = firebase.auth();
 
-    // Função de reserva
-    function reservar() {
-      const nome = document.getElementById("nome").value;
-      const telefone = document.getElementById("telefone").value;
-      const data = document.getElementById("data").value;
-      const horario = document.getElementById("horario").value;
+    // Função de login
+    function loginAdmin() {
+      const email = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-      if (!nome || !telefone || !data || !horario) {
-        alert("Preencha todos os campos!");
-        return;
-      }
-
-      db.ref("reservas/" + data + "/" + horario).set({
-        nome: nome,
-        telefone: telefone
-      });
-      alert("Reserva feita com sucesso!");
+      auth.signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          alert("Login realizado com sucesso!");
+          window.location.href = "admin.html"; // redireciona para painel admin
+        })
+        .catch(error => {
+          alert("Erro: " + error.message);
+        });
     }
-
-    // Exemplo de preenchimento de horários
-    function carregarHorarios() {
-      const horarios = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
-      const select = document.getElementById("horario");
-      select.innerHTML = "";
-      horarios.forEach(h => {
-        const opt = document.createElement("option");
-        opt.value = h;
-        opt.textContent = h;
-        select.appendChild(opt);
-      });
-    }
-    carregarHorarios();
   </script>
 </body>
 </html>
