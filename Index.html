@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendamento de Sobrancelhas</title>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h2 { text-align: center; }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #6a1b9a;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4a148c;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Agendamento de Sobrancelhas</h2>
+
+    <!-- Login Admin -->
+    <div id="loginArea">
+      <h3>Login Admin</h3>
+      <input type="password" id="adminPass" placeholder="Senha do admin">
+      <button onclick="loginAdmin()">Entrar</button>
+    </div>
+
+    <!-- Área Admin -->
+    <div id="adminArea" class="hidden">
+      <h3>Disponibilizar horários</h3>
+      <input type="date" id="adminDate">
+      <input type="time" id="adminTime">
+      <button onclick="addHorario()">Adicionar Horário</button>
+      <div id="horariosDisponiveis"></div>
+      <button onclick="logoutAdmin()">Sair</button>
+    </div>
+
+    <!-- Área Usuário -->
+    <div id="userArea" class="hidden">
+      <h3>Agendar</h3>
+      <input type="text" id="nome" placeholder="Seu nome">
+      <input type="tel" id="telefone" placeholder="Seu telefone">
+      <input type="date" id="data">
+      <select id="horarios"></select>
+      <button onclick="reservar()">Reservar</button>
+      <div id="msg"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 🔥 Configuração do Firebase (troque pelas suas chaves!)
+    const firebaseConfig = {
+      apiKey: "SUA-API-KEY",
+      authDomain: "SEU-PROJETO.firebaseapp.com",
+      projectId: "SEU-PROJETO",
+      storageBucket: "SEU-PROJETO.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef123456"
+    };
+
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const adminPassword = "1234"; // senha simples
+
+    // ---- Login ----
+    window.loginAdmin = function() {
+      const pass = document.getElementById("adminPass").value;
+      if (pass === adminPassword) {
+        document.getElementById("loginArea").classList.add("hidden");
+        document.getElementById("adminArea").classList.remove("hidden");
+        carregarHorarios();
+      } else {
+        alert("Senha incorreta!");
+      }
+    };
+
+    window.logoutAdmin = function() {
+      document.getElementById("adminArea").classList.add("hidden");
+      document.getElementById("loginArea").classList.remove("hidden");
+    };
+
+    // ---- Admin adiciona horário ----
+    window.addHorario = async function() {
+      const data = document.getElementById("adminDate").value;
+      const hora = document.getElementById("adminTime").value;
+
+      if (!data || !hora) {
+        alert("Selecione data e hora!");
+        return;
+      }
+
+      await addDoc(collection(db, "horarios"), {
+        data: data,
+        hora: hora,
+        disponivel: true
+      });
+
+      carregarHorarios();
+    };
+
+    async function carregarHorarios() {
+      let div = document.getElementById("horariosDisponiveis");
+      div.innerHTML = "<h4>Horários Cadastrados:</h4>";
+
+      const q = await getDocs(collection(db, "horarios"));
+      q.forEach(docSnap => {
+        const h = docSnap.data();
+        div.innerHTML += `<b>${h.data}</b> - ${h.hora} (${h.disponivel ? "Disponível" : "Reservado"})<br>`;
+      });
+    }
+
+    // ---- Usuário reserva horário ----
+    window.reservar = async function() {
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const data = document.getElementById("data").value;
+      const hora = document.getElementById("horarios").value;
+
+      if (!nome || !telefone || !data || !hora) {
+        alert("Preencha todos os campos!");
+        return;
+      }
+
+      // Verifica se horário está disponível
+      const q = query(collection(db, "horarios"), where("data", "==", data), where("hora", "==", hora), where("disponivel", "==", true));
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        alert("Horário já reservado!");
+        return;
+      }
+
+      const horarioDoc = snap.docs[0];
+      await updateDoc(doc(db, "horarios", horarioDoc.id), { disponivel: false });
+
+      await addDoc(collection(db, "agendamentos"), {
+        nome: nome,
+        telefone: telefone,
+        data: data,
+        hora: hora
+      });
+
+      document.getElementById("msg").innerHTML = "✅ Horário reservado com sucesso!";
+      atualizarHorarios();
+    };
+
+    document.getElementById("data").addEventListener("change", atualizarHorarios);
+
+    async function atualizarHorarios() {
+      const data = document.getElementById("data").value;
+      const select = document.getElementById("horarios");
+      select.innerHTML = "";
+
+      if (!data) return;
+
+      const q = query(collection(db, "horarios"), where("data", "==", data), where("disponivel", "==", true));
+      const snap = await getDocs(q);
+
+      snap.forEach(docSnap => {
+        let opt = document.createElement("option");
+        opt.value = docSnap.data().hora;
+        opt.text = docSnap.data().hora;
+        select.add(opt);
+      });
+    }
+
+    // Mostra a área do usuário por padrão
+    document.getElementById("userArea").classList.remove("hidden");
+  </script>
+</body>
+</html>
