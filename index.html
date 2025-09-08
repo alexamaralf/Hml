@@ -3,175 +3,263 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Admin - Agendamento</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Agenda de Sombrancelhas</title>
   <style>
-    body {
+    /* ===== Reset ===== */
+    * {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background: linear-gradient(180deg, #fff6f8, #ffeef2);
+      color: #4a3b3b;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #e8a0b3;
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      height: 100vh;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    header button {
+      background: white;
+      color: #e8a0b3;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    header button:hover {
+      background: #fff3f6;
     }
 
-    .login-card {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      max-width: 350px;
-      width: 100%;
+    /* ===== Container ===== */
+    .container {
+      flex: 1;
+      padding: 1.5rem;
+      max-width: 500px;
+      margin: auto;
+    }
+    h2 {
       text-align: center;
-    }
-
-    .login-card h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      color: #333;
-    }
-
-    .form-group {
       margin-bottom: 1rem;
-      text-align: left;
+      color: #c44f71;
     }
 
-    .form-group label {
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-      color: #444;
+    /* ===== Card ===== */
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
     }
-
-    .form-group input {
+    input, select, button {
       width: 100%;
       padding: 0.8rem;
+      margin: 0.6rem 0;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 1rem;
     }
-
-    .form-group input:focus {
-      border-color: #6a11cb;
+    input:focus, select:focus {
       outline: none;
+      border-color: #e8a0b3;
+      box-shadow: 0 0 5px rgba(232,160,179,0.5);
     }
-
-    .login-btn {
-      width: 100%;
-      padding: 0.9rem;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #ff6a00, #ee0979);
+    button {
+      background: #e8a0b3;
       color: white;
       font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 0.5rem;
+      border: none;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #d7899f;
     }
 
-    .login-btn:hover {
-      opacity: 0.9;
+    /* ===== Mensagem ===== */
+    #mensagem {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 1rem;
     }
 
-    .forgot {
-      text-align: right;
-      margin-top: 0.3rem;
+    /* ===== Painel Admin ===== */
+    .admin-panel {
+      display: none;
+      background: #fff6f8;
+      border: 2px dashed #e8a0b3;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .admin-panel h3 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #c44f71;
+    }
+    .admin-panel ul {
+      list-style: none;
+      margin-top: 1rem;
+    }
+    .admin-panel li {
+      background: white;
+      padding: 0.6rem;
+      margin: 0.3rem 0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
-    .forgot a {
-      font-size: 0.8rem;
-      color: #6a11cb;
-      text-decoration: none;
+    /* ===== Footer ===== */
+    footer {
+      background: #fbe0e8;
+      padding: 1rem;
+      text-align: center;
     }
-
-    .social-login {
-      margin-top: 1.5rem;
-    }
-
-    .social-login p {
-      font-size: 0.9rem;
+    footer p {
       margin-bottom: 0.5rem;
-      color: #666;
+      font-weight: bold;
+      color: #c44f71;
     }
-
-    .social-icons a {
-      margin: 0 8px;
-      font-size: 1.5rem;
-      color: #555;
+    .social-links a {
+      margin: 0 10px;
       text-decoration: none;
+      color: #c44f71;
+      font-size: 1.4rem;
+      transition: 0.3s;
     }
-
-    .social-icons a:hover {
-      color: #6a11cb;
-    }
-
-    @media (max-width: 480px) {
-      .login-card {
-        margin: 0 1rem;
-        padding: 1.5rem;
-      }
+    .social-links a:hover {
+      color: #a23c57;
     }
   </style>
+
+  <!-- Ícones (FontAwesome CDN) -->
+  <script src="https://kit.fontawesome.com/7d3b6ec5f5.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <div class="login-card">
-    <h2>Login</h2>
-    <div class="form-group">
-      <label for="username">Usuário</label>
-      <input type="text" id="username" placeholder="Digite seu usuário">
-    </div>
-    <div class="form-group">
-      <label for="password">Senha</label>
-      <input type="password" id="password" placeholder="Digite sua senha">
-    </div>
-    <div class="forgot">
-      <a href="#">Esqueceu a senha?</a>
-    </div>
-    <button class="login-btn" onclick="loginAdmin()">LOGIN</button>
+<header>
+  <h1>Studio Sombrancelhas</h1>
+  <button onclick="abrirLogin()">Admin</button>
+</header>
 
-    <div class="social-login">
-      <p>Ou entre com</p>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-google"></i></a>
-      </div>
-    </div>
+<div class="container">
+  <h2>Agende seu horário ✨</h2>
+  <div class="card">
+    <form id="formAgendamento">
+      <input type="text" id="nome" placeholder="Seu nome" required>
+      <input type="tel" id="telefone" placeholder="Seu telefone" required>
+      <label for="horario">Escolha um horário:</label>
+      <select id="horario" required></select>
+      <button type="submit">Confirmar Agendamento</button>
+    </form>
+    <div id="mensagem"></div>
   </div>
 
-  <!-- Firebase (Auth) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script>
-    // Configuração Firebase (substitua pelos seus dados)
-    const firebaseConfig = {
-      apiKey: "SUA_APIKEY",
-      authDomain: "SEU_PROJECT.firebaseapp.com",
-      projectId: "SEU_PROJECT",
-      storageBucket: "SEU_PROJECT.appspot.com",
-      messagingSenderId: "ID",
-      appId: "APP_ID"
-    };
+  <!-- Painel Admin -->
+  <div class="admin-panel" id="adminPanel">
+    <h3>Painel do Administrador</h3>
+    <form id="formAdmin">
+      <label for="novoHorario">Adicionar horário:</label>
+      <input type="time" id="novoHorario" required>
+      <button type="submit">Adicionar Horário</button>
+    </form>
+    <h4 style="margin-top:1rem; color:#c44f71;">Horários Disponíveis:</h4>
+    <ul id="listaHorarios"></ul>
+  </div>
+</div>
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+<footer>
+  <p>Siga-nos nas redes sociais</p>
+  <div class="social-links">
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-facebook"></i></a>
+    <a href="#"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
 
-    // Função de login
-    function loginAdmin() {
-      const email = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+<script>
+  const selectHorario = document.getElementById("horario");
+  const listaHorarios = document.getElementById("listaHorarios");
+  const formAgendamento = document.getElementById("formAgendamento");
+  const formAdmin = document.getElementById("formAdmin");
+  const mensagem = document.getElementById("mensagem");
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then(userCredential => {
-          alert("Login realizado com sucesso!");
-          window.location.href = "admin.html"; // redireciona para painel admin
-        })
-        .catch(error => {
-          alert("Erro: " + error.message);
-        });
+  let horarios = JSON.parse(localStorage.getItem("horarios")) || [];
+
+  function atualizarHorarios() {
+    selectHorario.innerHTML = "";
+    listaHorarios.innerHTML = "";
+    horarios.forEach((h) => {
+      if (!h.reservado) {
+        let option = document.createElement("option");
+        option.value = h.hora;
+        option.textContent = h.hora;
+        selectHorario.appendChild(option);
+      }
+      let li = document.createElement("li");
+      li.textContent = h.hora + (h.reservado ? " (reservado)" : "");
+      listaHorarios.appendChild(li);
+    });
+    localStorage.setItem("horarios", JSON.stringify(horarios));
+  }
+
+  formAgendamento.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nome = document.getElementById("nome").value;
+    const telefone = document.getElementById("telefone").value;
+    const hora = selectHorario.value;
+
+    let horario = horarios.find(h => h.hora === hora);
+    if (horario && !horario.reservado) {
+      horario.reservado = true;
+      horario.cliente = { nome, telefone };
+      mensagem.textContent = "✅ Agendamento confirmado para " + hora;
+      mensagem.style.color = "green";
+    } else {
+      mensagem.textContent = "⚠️ Esse horário não está mais disponível.";
+      mensagem.style.color = "red";
     }
-  </script>
+    atualizarHorarios();
+    formAgendamento.reset();
+  });
+
+  formAdmin.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const novoHorario = document.getElementById("novoHorario").value;
+    if (novoHorario && !horarios.some(h => h.hora === novoHorario)) {
+      horarios.push({ hora: novoHorario, reservado: false });
+    }
+    atualizarHorarios();
+    formAdmin.reset();
+  });
+
+  function abrirLogin() {
+    let senha = prompt("Digite a senha de administrador:");
+    if (senha === "1234") {
+      document.getElementById("adminPanel").style.display = "block";
+    } else {
+      alert("Senha incorreta!");
+    }
+  }
+
+  atualizarHorarios();
+</script>
+
 </body>
 </html>
