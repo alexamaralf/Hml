@@ -2,272 +2,230 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agendamento de Sobrancelhas</title>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #fdf5f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
+      background: #fdfdfd;
+      color: #333;
     }
+
     header {
-      background: #6a1b9a;
-      color: #fff;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      background: #b76e79;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
     }
+
     header h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 1.8rem;
     }
-    header button {
-      background: #fff;
-      color: #6a1b9a;
+
+    #adminBtn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: white;
+      color: #b76e79;
       border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
     }
-    header button:hover {
-      background: #eee;
-    }
+
     .container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+      padding: 1rem;
     }
-    h2, h3 { text-align: center; }
-    input, select, button {
+
+    h2 {
+      margin-top: 2rem;
+      color: #b76e79;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    input, select, button, textarea {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
+      padding: 0.7rem;
       border: 1px solid #ccc;
-      font-size: 15px;
+      border-radius: 8px;
+      font-size: 1rem;
     }
+
     button {
-      background: #6a1b9a;
-      color: #fff;
+      background: #b76e79;
+      color: white;
       font-weight: bold;
       cursor: pointer;
+      border: none;
     }
+
     button:hover {
-      background: #4a148c;
+      background: #a45d68;
     }
-    .hidden { display: none; }
-    .horarios-lista {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+
+    .avisos {
+      background: #fff3cd;
+      padding: 1rem;
+      border: 1px solid #ffeeba;
+      border-radius: 8px;
+      margin-top: 1rem;
     }
-    .horarios-lista label {
-      background: #f3e5f5;
-      border: 1px solid #6a1b9a;
-      border-radius: 6px;
-      padding: 6px 10px;
-      cursor: pointer;
+
+    .portifolio {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 1rem;
     }
-    .horarios-lista input {
-      margin-right: 5px;
-    }
-    .imagem-topo {
-      display: block;
-      margin: 0 auto 20px auto;
-      max-width: 200px;
+
+    .portifolio img {
+      width: 100%;
       border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      margin-top: 2rem;
+      background: #b76e79;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .social {
+      margin-top: 1rem;
+    }
+
+    .social a {
+      margin: 0 10px;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+
+    .social a:hover {
+      color: #ffe4ec;
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+      input, select, button {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>Beleza & Sobrancelhas</h1>
-    <button onclick="toggleAdmin()">Área do Admin</button>
+    <h1>Agende sua Sobrancelha</h1>
+    <button id="adminBtn">Admin</button>
   </header>
 
   <div class="container">
-    <img class="imagem-topo" src="https://cdn.pixabay.com/photo/2016/11/29/06/18/makeup-1866556_1280.jpg" alt="Estética e sobrancelhas">
-
-    <!-- Área Usuário -->
-    <div id="userArea">
-      <h2>Agende seu horário</h2>
-      <input type="text" id="nome" placeholder="Seu nome">
-      <input type="tel" id="telefone" placeholder="Seu telefone">
-      <input type="date" id="data">
-      <select id="horarios"></select>
-      <button onclick="reservar()">Reservar</button>
-      <div id="msg"></div>
+    <!-- Área de Avisos -->
+    <div class="avisos">
+      <h3>📢 Avisos</h3>
+      <p>Promoção desta semana: faça sobrancelha e ganhe desconto em design!</p>
     </div>
 
-    <!-- Área Admin -->
-    <div id="adminArea" class="hidden">
-      <h2>Painel do Administrador</h2>
-      <div id="loginArea">
-        <h3>Login</h3>
-        <input type="password" id="adminPass" placeholder="Senha do admin">
-        <button onclick="loginAdmin()">Entrar</button>
-      </div>
+    <!-- Formulário de agendamento -->
+    <h2>Reserve seu horário</h2>
+    <div class="form-group">
+      <input type="text" id="nome" placeholder="Seu nome">
+    </div>
+    <div class="form-group">
+      <input type="tel" id="telefone" placeholder="Seu telefone">
+    </div>
+    <div class="form-group">
+      <input type="date" id="data">
+    </div>
+    <div class="form-group">
+      <select id="horario"></select>
+    </div>
+    <button onclick="reservar()">Reservar</button>
 
-      <div id="adminPanel" class="hidden">
-        <h3>Disponibilizar horários</h3>
-        <input type="date" id="adminDate">
-
-        <div class="horarios-lista">
-          <!-- checkboxes de horários padrão -->
-          <label><input type="checkbox" value="09:00">09:00</label>
-          <label><input type="checkbox" value="10:00">10:00</label>
-          <label><input type="checkbox" value="11:00">11:00</label>
-          <label><input type="checkbox" value="13:00">13:00</label>
-          <label><input type="checkbox" value="14:00">14:00</label>
-          <label><input type="checkbox" value="15:00">15:00</label>
-          <label><input type="checkbox" value="16:00">16:00</label>
-          <label><input type="checkbox" value="17:00">17:00</label>
-        </div>
-
-        <button onclick="addHorarios()">Adicionar Selecionados</button>
-        <div id="horariosDisponiveis"></div>
-        <button onclick="logoutAdmin()">Sair</button>
-      </div>
+    <!-- Portfólio -->
+    <h2>Portfólio</h2>
+    <div class="portifolio">
+      <img src="https://via.placeholder.com/200x200?text=Trabalho+1" alt="Trabalho 1">
+      <img src="https://via.placeholder.com/200x200?text=Trabalho+2" alt="Trabalho 2">
+      <img src="https://via.placeholder.com/200x200?text=Trabalho+3" alt="Trabalho 3">
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <footer>
+    <p>© 2025 Studio de Sobrancelhas</p>
+    <div class="social">
+      <a href="https://wa.me/5599999999999" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://instagram.com/seuinsta" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
 
-    // 🔥 Configuração Firebase (troque pelas suas credenciais)
+  <!-- Firebase e Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+  <script>
+    // Configuração Firebase (substitua pelos seus dados)
     const firebaseConfig = {
-      apiKey: "SUA-API-KEY",
-      authDomain: "SEU-PROJETO.firebaseapp.com",
-      projectId: "SEU-PROJETO",
-      storageBucket: "SEU-PROJETO.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef123456"
+      apiKey: "SUA_APIKEY",
+      authDomain: "SEU_PROJECT.firebaseapp.com",
+      databaseURL: "https://SEU_PROJECT.firebaseio.com",
+      projectId: "SEU_PROJECT",
+      storageBucket: "SEU_PROJECT.appspot.com",
+      messagingSenderId: "ID",
+      appId: "APP_ID"
     };
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const adminPassword = "1234";
-
-    // Mostrar/ocultar área admin
-    window.toggleAdmin = function() {
-      document.getElementById("adminArea").classList.toggle("hidden");
-    };
-
-    // Login
-    window.loginAdmin = function() {
-      const pass = document.getElementById("adminPass").value;
-      if (pass === adminPassword) {
-        document.getElementById("loginArea").classList.add("hidden");
-        document.getElementById("adminPanel").classList.remove("hidden");
-        carregarHorarios();
-      } else {
-        alert("Senha incorreta!");
-      }
-    };
-
-    window.logoutAdmin = function() {
-      document.getElementById("loginArea").classList.remove("hidden");
-      document.getElementById("adminPanel").classList.add("hidden");
-    };
-
-    // Adicionar vários horários de uma vez
-    window.addHorarios = async function() {
-      const data = document.getElementById("adminDate").value;
-      const checkboxes = document.querySelectorAll(".horarios-lista input:checked");
-
-      if (!data || checkboxes.length === 0) {
-        alert("Selecione uma data e pelo menos um horário!");
-        return;
-      }
-
-      for (let cb of checkboxes) {
-        await addDoc(collection(db, "horarios"), {
-          data: data,
-          hora: cb.value,
-          disponivel: true
-        });
-        cb.checked = false;
-      }
-
-      carregarHorarios();
-    };
-
-    async function carregarHorarios() {
-      let div = document.getElementById("horariosDisponiveis");
-      div.innerHTML = "<h4>Horários cadastrados:</h4>";
-
-      const q = await getDocs(collection(db, "horarios"));
-      q.forEach(docSnap => {
-        const h = docSnap.data();
-        div.innerHTML += `<b>${h.data}</b> - ${h.hora} (${h.disponivel ? "Disponível" : "Reservado"})<br>`;
-      });
-    }
-
-    // Reserva
-    window.reservar = async function() {
+    // Função de reserva
+    function reservar() {
       const nome = document.getElementById("nome").value;
       const telefone = document.getElementById("telefone").value;
       const data = document.getElementById("data").value;
-      const hora = document.getElementById("horarios").value;
+      const horario = document.getElementById("horario").value;
 
-      if (!nome || !telefone || !data || !hora) {
+      if (!nome || !telefone || !data || !horario) {
         alert("Preencha todos os campos!");
         return;
       }
 
-      const q = query(collection(db, "horarios"), where("data", "==", data), where("hora", "==", hora), where("disponivel", "==", true));
-      const snap = await getDocs(q);
-
-      if (snap.empty) {
-        alert("Horário já reservado!");
-        return;
-      }
-
-      const horarioDoc = snap.docs[0];
-      await updateDoc(doc(db, "horarios", horarioDoc.id), { disponivel: false });
-
-      await addDoc(collection(db, "agendamentos"), {
+      db.ref("reservas/" + data + "/" + horario).set({
         nome: nome,
-        telefone: telefone,
-        data: data,
-        hora: hora
+        telefone: telefone
       });
+      alert("Reserva feita com sucesso!");
+    }
 
-      document.getElementById("msg").innerHTML = "✅ Horário reservado com sucesso!";
-      atualizarHorarios();
-    };
-
-    document.getElementById("data").addEventListener("change", atualizarHorarios);
-
-    async function atualizarHorarios() {
-      const data = document.getElementById("data").value;
-      const select = document.getElementById("horarios");
+    // Exemplo de preenchimento de horários
+    function carregarHorarios() {
+      const horarios = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
+      const select = document.getElementById("horario");
       select.innerHTML = "";
-
-      if (!data) return;
-
-      const q = query(collection(db, "horarios"), where("data", "==", data), where("disponivel", "==", true));
-      const snap = await getDocs(q);
-
-      snap.forEach(docSnap => {
-        let opt = document.createElement("option");
-        opt.value = docSnap.data().hora;
-        opt.text = docSnap.data().hora;
-        select.add(opt);
+      horarios.forEach(h => {
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.textContent = h;
+        select.appendChild(opt);
       });
     }
+    carregarHorarios();
   </script>
 </body>
 </html>
