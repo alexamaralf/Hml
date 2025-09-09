@@ -7,27 +7,42 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:Poppins,Arial,sans-serif;background:linear-gradient(180deg,#fff6f8,#ffeef2);color:#4a3b3b;display:flex;flex-direction:column;min-height:100vh}
+  
   header{background:#e8a0b3;color:white;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 8px rgba(0,0,0,0.1)}
   header h1{font-size:1.4rem;font-weight:bold}
+  .header-actions{display:flex;align-items:center;gap:15px}
   header button{background:white;color:#e8a0b3;border:none;padding:.5rem 1rem;border-radius:20px;font-weight:bold;cursor:pointer;transition:.3s}
   header button:hover{background:#fff3f6}
-  .container{flex:1;padding:1.5rem;max-width:600px;margin:auto}
+  
+  .container{flex:1;padding:1.5rem;max-width:700px;margin:auto}
   h2{text-align:center;margin-bottom:1rem;color:#c44f71}
+  
   .card{background:white;border-radius:15px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);margin-bottom:1.5rem}
   input, select, button{width:100%;padding:.8rem;margin:.6rem 0;border:1px solid #ddd;border-radius:12px;font-size:1rem}
   input:focus, select:focus{outline:none;border-color:#e8a0b3;box-shadow:0 0 5px rgba(232,160,179,0.5)}
   button{background:#e8a0b3;color:white;font-weight:bold;border:none;transition:.3s}
   button:hover{background:#d7899f}
   #mensagem{text-align:center;font-weight:bold;margin-top:1rem}
+  
   .admin-panel{display:none;background:#fff6f8;border:2px dashed #e8a0b3;border-radius:12px;padding:1rem;margin-top:1rem}
   .admin-panel h3{text-align:center;margin-bottom:1rem;color:#c44f71}
-  .admin-panel ul{list-style:none;margin-top:1rem}
-  .admin-panel li{background:white;padding:.6rem;margin:.3rem 0;border-radius:8px;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,0.05)}
+  .admin-panel .filtro-data{margin-bottom:1rem}
+  .admin-panel ul{list-style:none;margin-top:1rem;padding:0}
+  .admin-panel li{background:white;padding:.6rem;margin:.3rem 0;border-radius:8px;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,0.05);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .admin-btns button{margin-left:5px;padding:4px 8px;font-size:.8rem;border-radius:6px;cursor:pointer}
+  .btn-edit{background:#f7c948;color:#333}
+  .btn-delete{background:#e57373;color:white}
+  .btn-whatsapp{background:#25d366;color:white}
+  
   footer{background:#fbe0e8;padding:1rem;text-align:center}
   footer p{margin-bottom:.5rem;font-weight:bold;color:#c44f71}
-  .social-links a{margin:0 10px;text-decoration:none;color:#c44f71;font-size:1.4rem;transition:.3s}
-  .social-links a:hover{color:#a23c57}
-  /* calendário */
+  
+  .social-links{display:flex;gap:15px;justify-content:center}
+  .social-btn{width:55px;height:55px;background:white;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:1.8rem;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:transform 0.3s, box-shadow 0.3s}
+  .social-btn:hover{transform:scale(1.1);box-shadow:0 6px 14px rgba(0,0,0,0.2)}
+  .social-btn.insta i{color:#c13584}
+  .social-btn.zap i{color:#25d366}
+  
   .calendar{display:flex;flex-wrap:wrap;margin:1rem 0}
   .day{flex:1 0 14%;padding:.8rem;margin:.2rem;background:#fff3f6;text-align:center;border-radius:8px;cursor:pointer;transition:.2s;border:1px solid transparent}
   .day:hover{background:#fddce6}
@@ -40,7 +55,13 @@
 
 <header>
   <h1>Studio Sombrancelhas</h1>
-  <button onclick="abrirLogin()">Admin</button>
+  <div class="header-actions">
+    <div class="social-links">
+      <a href="https://www.instagram.com/seuinstagram" target="_blank" class="social-btn insta" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/5511999999999" target="_blank" class="social-btn zap" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+    <button onclick="abrirLogin()">Admin</button>
+  </div>
 </header>
 
 <div class="container">
@@ -48,7 +69,7 @@
 <div class="card">
   <form id="formAgendamento">
     <input type="text" id="nome" placeholder="Seu nome" required>
-    <input type="tel" id="telefone" placeholder="Seu telefone" required>
+    <input type="tel" id="telefone" placeholder="Seu telefone (DDD+Número)" required>
     
     <label>Escolha o dia:</label>
     <div class="calendar" id="calendar"></div>
@@ -69,23 +90,32 @@
 </div>
 
 <div class="admin-panel" id="adminPanel">
-<h3>Painel do Administrador</h3>
-<form id="formAdmin">
-  <label for="novoHorario">Adicionar horário:</label>
-  <input type="time" id="novoHorario" required>
-  <button type="submit">Adicionar Horário</button>
-</form>
-<h4 style="margin-top:1rem; color:#c44f71;">Horários e reservas:</h4>
-<ul id="listaHorarios"></ul>
+  <h3>Painel do Administrador</h3>
+
+  <div class="filtro-data">
+    <label>Filtrar por data:</label>
+    <input type="date" id="filtroData">
+  </div>
+
+  <form id="formAdmin">
+    <label for="novaData">Escolha a data:</label>
+    <input type="date" id="novaData" required>
+
+    <label for="novoHorario">Adicionar horário:</label>
+    <input type="time" id="novoHorario" required>
+
+    <button type="submit">Adicionar Horário</button>
+  </form>
+  <h4 style="margin-top:1rem; color:#c44f71;">Horários e reservas:</h4>
+  <ul id="listaHorarios"></ul>
 </div>
 </div>
 
 <footer>
 <p>Siga-nos nas redes sociais</p>
 <div class="social-links">
-  <a href="#"><i class="fab fa-instagram"></i></a>
-  <a href="#"><i class="fab fa-facebook"></i></a>
-  <a href="#"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://www.instagram.com/seuinstagram" target="_blank" class="social-btn insta" title="Instagram"><i class="fab fa-instagram"></i></a>
+  <a href="https://wa.me/5511999999999" target="_blank" class="social-btn zap" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 </div>
 </footer>
 
@@ -98,11 +128,11 @@ const formAdmin = document.getElementById("formAdmin");
 const mensagem = document.getElementById("mensagem");
 const servicoSelect = document.getElementById("servico");
 const totalEl = document.getElementById("total");
+const filtroData = document.getElementById("filtroData");
 
 let horarios = JSON.parse(localStorage.getItem("horarios")) || [];
 let selectedDay = null;
 
-// ===== Criar calendário com 7 dias a partir de hoje
 function criarCalendario(){
   calendarEl.innerHTML="";
   const hoje = new Date();
@@ -128,16 +158,56 @@ function selecionarDia(div){
 function atualizarHorarios(){
   selectHorario.innerHTML="";
   listaHorarios.innerHTML="";
-  const diaHorarios = horarios.filter(h=>h.data===selectedDay);
+  const filtro = filtroData.value || selectedDay;
+  if(!filtro) return;
+
+  const diaHorarios = horarios.filter(h=>h.data===filtro);
   diaHorarios.forEach(h=>{
-    if(!h.reservado){
+    if(!h.reservado && filtro===selectedDay){
       let option = document.createElement("option");
       option.value = h.hora;
       option.textContent = h.hora;
       selectHorario.appendChild(option);
     }
     let li = document.createElement("li");
-    li.textContent = `${h.data} ${h.hora} - ${h.reservado ? `${h.cliente.nome} (${h.servico})` : "Disponível"}`;
+    li.innerHTML = `<strong>${h.data} ${h.hora}</strong> - ${h.reservado ? `${h.cliente.nome} (${h.servico})` : "Disponível"}`;
+    
+    let btns = document.createElement("div");
+    btns.classList.add("admin-btns");
+
+    if(h.reservado){
+      let btnZap = document.createElement("button");
+      btnZap.classList.add("btn-whatsapp");
+      btnZap.textContent = "WhatsApp";
+      btnZap.onclick = ()=>{ window.open(`https://wa.me/${h.cliente.telefone.replace(/\D/g,'')}`,"_blank"); };
+      
+      let btnEdit = document.createElement("button");
+      btnEdit.classList.add("btn-edit");
+      btnEdit.textContent = "Editar";
+      btnEdit.onclick = ()=>editarAgendamento(h);
+      
+      let btnDel = document.createElement("button");
+      btnDel.classList.add("btn-delete");
+      btnDel.textContent = "Excluir";
+      btnDel.onclick = ()=>excluirAgendamento(h);
+
+      btns.appendChild(btnZap);
+      btns.appendChild(btnEdit);
+      btns.appendChild(btnDel);
+    } else {
+      let btnRemove = document.createElement("button");
+      btnRemove.classList.add("btn-delete");
+      btnRemove.textContent = "Remover";
+      btnRemove.onclick = ()=>{
+        if(confirm(`Deseja remover o horário ${h.data} ${h.hora}?`)){
+          horarios = horarios.filter(x => !(x.data===h.data && x.hora===h.hora));
+          atualizarHorarios();
+        }
+      };
+      btns.appendChild(btnRemove);
+    }
+
+    li.appendChild(btns);
     listaHorarios.appendChild(li);
   });
   calcularTotal();
@@ -173,14 +243,32 @@ formAgendamento.addEventListener("submit",(e)=>{
 
 formAdmin.addEventListener("submit",(e)=>{
   e.preventDefault();
-  if(!selectedDay){alert("Selecione um dia primeiro"); return;}
-  const novoHorario=document.getElementById("novoHorario").value;
-  if(novoHorario && !horarios.some(h=>h.data===selectedDay && h.hora===novoHorario)){
-    horarios.push({data:selectedDay,hora:novoHorario,reservado:false});
+  const novaData = document.getElementById("novaData").value;
+  const novoHorario = document.getElementById("novoHorario").value;
+
+  if(!novaData){ alert("Selecione uma data!"); return; }
+
+  const hoje = new Date();
+  hoje.setHours(0,0,0,0);
+  const limite = new Date();
+  limite.setDate(hoje.getDate()+30);
+  const dataEscolhida = new Date(novaData);
+  if(dataEscolhida < hoje || dataEscolhida > limite){
+    alert("⚠️ Só é permitido cadastrar datas até 30 dias a partir de hoje.");
+    return;
   }
+
+  if(novoHorario && !horarios.some(h=>h.data===novaData && h.hora===novoHorario)){
+    horarios.push({data:novaData,hora:novoHorario,reservado:false});
+  } else {
+    alert("⚠️ Esse horário já existe para a data escolhida.");
+  }
+
   atualizarHorarios();
   formAdmin.reset();
 });
+
+filtroData.addEventListener("change",atualizarHorarios);
 
 function abrirLogin(){
   let senha=prompt("Digite a senha de administrador:");
@@ -194,7 +282,24 @@ function calcularTotal(){
   totalEl.textContent=`Total: R$${valor}`;
 }
 
-servicoSelect.addEventListener("change",calcularTotal);
+function excluirAgendamento(h){
+  if(confirm("Deseja excluir este agendamento?")){
+    h.reservado=false;
+    h.cliente=null;
+    h.servico=null;
+    atualizarHorarios();
+  }
+}
+
+function editarAgendamento(h){
+  const novoNome = prompt("Nome do cliente:", h.cliente.nome);
+  const novoTel = prompt("Telefone:", h.cliente.telefone);
+  if(novoNome && novoTel){
+    h.cliente.nome = novoNome;
+    h.cliente.telefone = novoTel;
+    atualizarHorarios();
+  }
+}
 
 criarCalendario();
 </script>
