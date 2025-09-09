@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Studio Sombrancelhas</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Poppins,Arial,sans-serif;background:linear-gradient(180deg,#fff6f8,#ffeef2);color:#4a3b3b;display:flex;flex-direction:column;min-height:100vh}
+  
+  header{background:#e8a0b3;color:white;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+  header h1{font-size:2rem;font-weight:700;letter-spacing:1px;}
+  
+  .container{flex:1;padding:2rem 1.5rem;max-width:450px;margin:auto;width:100%}
+  h2{text-align:center;margin-bottom:1.5rem;color:#c44f71;font-size:1.6rem;letter-spacing:.5px;}
+  
+  .card{background:white;border-radius:18px;padding:2rem;box-shadow:0 6px 24px rgba(200,79,113,0.08);margin-bottom:2rem}
+  input{width:100%;padding:.9rem;margin:.7rem 0;border:1.5px solid #e8a0b3;border-radius:14px;font-size:1.05rem;transition:.3s}
+  input:focus{outline:none;border-color:#c44f71;box-shadow:0 0 8px #e8a0b355}
+  button{width:100%;background:linear-gradient(90deg,#e8a0b3,#c44f71);color:white;font-weight:600;border:none;transition:.3s;box-shadow:0 2px 8px rgba(200,79,113,0.08);padding:.9rem;margin:.7rem 0;border-radius:14px;font-size:1.05rem;}
+  button:hover{background:linear-gradient(90deg,#c44f71,#e8a0b3);cursor:pointer}
+  
+  #mensagem{text-align:center;font-weight:bold;margin-top:1rem;min-height:2rem}
+  
+  .voltar-btn{background:none;border:2px solid #e8a0b3;color:#c44f71;margin-top:1rem}
+  .voltar-btn:hover{background:#fddce6;border-color:#c44f71}
+
+  .campo-senha{position:relative}
+  .campo-senha input{padding-right:40px}
+  .toggle-senha{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;padding:5px;width:auto;box-shadow:none;cursor:pointer;color:#777}
+  .toggle-senha:hover{color:#c44f71}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Studio Sombrancelhas</h1>
+</header>
+
+<div class="container">
+  <h2>Login Administrativo</h2>
+  <div class="card">
+    <form id="formLogin">
+      <input type="text" id="usuario" placeholder="Usuário" required>
+      <div class="campo-senha">
+        <input type="password" id="senha" placeholder="Senha" required>
+        <button type="button" class="toggle-senha" onclick="toggleSenha()">👁️</button>
+      </div>
+      <button type="submit">Entrar</button>
+    </form>
+    <div id="mensagem"></div>
+    <button class="voltar-btn" onclick="window.location.href='index.html'">Voltar</button>
+  </div>
+</div>
+
+<script>
+const formLogin = document.getElementById("formLogin");
+const mensagem = document.getElementById("mensagem");
+
+formLogin.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const usuario = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
+  // Validação simples - em produção use autenticação mais segura
+  if(usuario === "admin" && senha === "1234"){
+    localStorage.setItem("adminLogado", "true");
+    window.location.href = "admin.html";
+  } else {
+    mensagem.textContent = "⚠️ Usuário ou senha incorretos";
+    mensagem.style.color = "red";
+  }
+});
+
+function toggleSenha() {
+  const senhaInput = document.getElementById("senha");
+  const tipo = senhaInput.type;
+  senhaInput.type = tipo === "password" ? "text" : "password";
+}
+</script>
+
+</body>
+</html>
