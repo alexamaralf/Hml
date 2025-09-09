@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" e-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Agenda de Sombrancelhas</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
@@ -46,6 +46,107 @@
   .day:hover{background:#fddce6}
   .day.selected{background:#e8a0b3;color:white;border-color:#c44f71}
   .time-select{margin-top:.5rem}
+
+  /* Mobile Responsive Styles */
+  @media screen and (max-width: 768px) {
+    header {
+      padding: 1rem;
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+    }
+
+    .container {
+      padding: 1rem;
+    }
+
+    .card {
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .calendar {
+      gap: 0.3rem;
+    }
+
+    .day {
+      flex: 0 0 calc(33.33% - 0.6rem);
+      padding: 0.7rem;
+      font-size: 0.9rem;
+      margin: 0.3rem;
+    }
+
+    input, select, button {
+      padding: 0.8rem;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .admin-panel li {
+      padding: 0.8rem;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .admin-btns {
+      display: flex;
+      gap: 0.5rem;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .admin-btns button {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 0.8rem;
+      margin: 0;
+    }
+
+    .social-links {
+      gap: 12px;
+    }
+
+    .social-btn {
+      width: 44px;
+      height: 44px;
+    }
+
+    .social-btn svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  /* Small Mobile Devices */
+  @media screen and (max-width: 360px) {
+    header h1 {
+      font-size: 1.3rem;
+    }
+
+    .header-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .day {
+      flex: 0 0 calc(50% - 0.6rem);
+      font-size: 0.85rem;
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    .social-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
 </style>
 </head>
 <body>
