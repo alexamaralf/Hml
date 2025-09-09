@@ -8,48 +8,45 @@
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:Poppins,Arial,sans-serif;background:linear-gradient(180deg,#fff6f8,#ffeef2);color:#4a3b3b;display:flex;flex-direction:column;min-height:100vh}
   
-  header{background:#e8a0b3;color:white;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 8px rgba(0,0,0,0.1)}
-  header h1{font-size:1.4rem;font-weight:bold}
-  .header-actions{display:flex;align-items:center;gap:15px}
-  header button{background:white;color:#e8a0b3;border:none;padding:.5rem 1rem;border-radius:20px;font-weight:bold;cursor:pointer;transition:.3s}
-  header button:hover{background:#fff3f6}
+  header{background:#e8a0b3;color:white;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+  header h1{font-size:2rem;font-weight:700;letter-spacing:1px;}
+  .header-actions{display:flex;align-items:center;gap:20px}
+  header button{background:linear-gradient(90deg,#e8a0b3,#c44f71);color:white;border:none;padding:.7rem 1.5rem;border-radius:25px;font-weight:600;cursor:pointer;transition:.3s;box-shadow:0 2px 8px rgba(200,79,113,0.08)}
+  header button:hover{background:linear-gradient(90deg,#c44f71,#e8a0b3);transform:translateY(-2px);}
   
-  .container{flex:1;padding:1.5rem;max-width:700px;margin:auto}
-  h2{text-align:center;margin-bottom:1rem;color:#c44f71}
+  .container{flex:1;padding:2rem 1.5rem;max-width:700px;margin:auto}
+  h2{text-align:center;margin-bottom:1.5rem;color:#c44f71;font-size:1.6rem;letter-spacing:.5px;}
   
-  .card{background:white;border-radius:15px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);margin-bottom:1.5rem}
-  input, select, button{width:100%;padding:.8rem;margin:.6rem 0;border:1px solid #ddd;border-radius:12px;font-size:1rem}
-  input:focus, select:focus{outline:none;border-color:#e8a0b3;box-shadow:0 0 5px rgba(232,160,179,0.5)}
-  button{background:#e8a0b3;color:white;font-weight:bold;border:none;transition:.3s}
-  button:hover{background:#d7899f}
-  #mensagem{text-align:center;font-weight:bold;margin-top:1rem}
+  .card{background:white;border-radius:18px;padding:2rem;box-shadow:0 6px 24px rgba(200,79,113,0.08);margin-bottom:2rem}
+  input, select, button{width:100%;padding:.9rem;margin:.7rem 0;border:1.5px solid #e8a0b3;border-radius:14px;font-size:1.05rem;transition:.3s}
+  input:focus, select:focus{outline:none;border-color:#c44f71;box-shadow:0 0 8px #e8a0b355}
+  button{background:linear-gradient(90deg,#e8a0b3,#c44f71);color:white;font-weight:600;border:none;transition:.3s;box-shadow:0 2px 8px rgba(200,79,113,0.08)}
+  button:hover{background:linear-gradient(90deg,#c44f71,#e8a0b3);}
+  #mensagem{text-align:center;font-weight:bold;margin-top:1rem;min-height:2rem}
   
-  .admin-panel{display:none;background:#fff6f8;border:2px dashed #e8a0b3;border-radius:12px;padding:1rem;margin-top:1rem}
-  .admin-panel h3{text-align:center;margin-bottom:1rem;color:#c44f71}
+  .admin-panel{display:none;background:#fff6f8;border:2px dashed #e8a0b3;border-radius:14px;padding:1.5rem;margin-top:1.5rem}
+  .admin-panel h3{text-align:center;margin-bottom:1rem;color:#c44f71;font-size:1.2rem;}
   .admin-panel .filtro-data{margin-bottom:1rem}
   .admin-panel ul{list-style:none;margin-top:1rem;padding:0}
-  .admin-panel li{background:white;padding:.6rem;margin:.3rem 0;border-radius:8px;font-size:.95rem;box-shadow:0 2px 6px rgba(0,0,0,0.05);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-  .admin-btns button{margin-left:5px;padding:4px 8px;font-size:.8rem;border-radius:6px;cursor:pointer}
+  .admin-panel li{background:white;padding:.7rem;margin:.4rem 0;border-radius:10px;font-size:1rem;box-shadow:0 2px 8px rgba(200,79,113,0.04);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .admin-btns button{margin-left:5px;padding:4px 10px;font-size:.9rem;border-radius:7px;cursor:pointer}
   .btn-edit{background:#f7c948;color:#333}
   .btn-delete{background:#e57373;color:white}
   .btn-whatsapp{background:#25d366;color:white}
   
-  footer{background:#fbe0e8;padding:1rem;text-align:center}
-  footer p{margin-bottom:.5rem;font-weight:bold;color:#c44f71}
+  footer{background:#fbe0e8;padding:1.2rem;text-align:center}
+  footer p{margin-bottom:.5rem;font-weight:bold;color:#c44f71;letter-spacing:.5px;}
   
-  .social-links{display:flex;gap:15px;justify-content:center}
-  .social-btn{width:55px;height:55px;background:white;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:1.8rem;box-shadow:0 4px 10px rgba(0,0,0,0.15);transition:transform 0.3s, box-shadow 0.3s}
-  .social-btn:hover{transform:scale(1.1);box-shadow:0 6px 14px rgba(0,0,0,0.2)}
-  .social-btn.insta i{color:#c13584}
-  .social-btn.zap i{color:#25d366}
-  
-  .calendar{display:flex;flex-wrap:wrap;margin:1rem 0}
-  .day{flex:1 0 14%;padding:.8rem;margin:.2rem;background:#fff3f6;text-align:center;border-radius:8px;cursor:pointer;transition:.2s;border:1px solid transparent}
+  .social-links{display:flex;gap:18px;justify-content:center}
+  .social-btn{width:52px;height:52px;background:white;border-radius:50%;display:flex;justify-content:center;align-items:center;box-shadow:0 4px 12px rgba(0,0,0,0.13);transition:transform 0.3s, box-shadow 0.3s;border:none;outline:none;cursor:pointer;}
+  .social-btn:hover{transform:scale(1.12);box-shadow:0 8px 18px rgba(0,0,0,0.18)}
+  .social-btn svg{width:32px;height:32px;display:block;}
+  .calendar{display:flex;flex-wrap:wrap;margin:1.2rem 0}
+  .day{flex:1 0 14%;padding:.9rem;margin:.2rem;background:#fff3f6;text-align:center;border-radius:10px;cursor:pointer;transition:.2s;border:1.5px solid transparent;font-weight:500;letter-spacing:.5px;}
   .day:hover{background:#fddce6}
-  .day.selected{background:#e8a0b3;color:white}
+  .day.selected{background:#e8a0b3;color:white;border-color:#c44f71}
   .time-select{margin-top:.5rem}
 </style>
-<script src="https://kit.fontawesome.com/7d3b6ec5f5.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -57,8 +54,12 @@
   <h1>Studio Sombrancelhas</h1>
   <div class="header-actions">
     <div class="social-links">
-      <a href="https://www.instagram.com/seuinstagram" target="_blank" class="social-btn insta" title="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://wa.me/5511999999999" target="_blank" class="social-btn zap" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://www.instagram.com/seuinstagram" target="_blank" class="social-btn insta" title="Instagram" aria-label="Instagram">
+        <svg viewBox="0 0 448 448"><defs><radialGradient id="insta-gradient" cx="30%" cy="107%" r="150%" fx="30%" fy="107%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect width="448" height="448" rx="90" fill="url(#insta-gradient)"/><path d="M224 144a80 80 0 1 0 0 160 80 80 0 0 0 0-160zm124-24a28 28 0 1 1-56 0 28 28 0 0 1 56 0z" fill="#fff"/><circle cx="224" cy="224" r="64" fill="#fff"/></svg>
+      </a>
+      <a href="https://wa.me/5511999999999" target="_blank" class="social-btn zap" title="WhatsApp" aria-label="WhatsApp">
+        <svg viewBox="0 0 448 448"><circle cx="224" cy="224" r="224" fill="#25d366"/><path d="M337.6 110.4c-30.4-30.4-71-47.2-114.4-47.2-89.6 0-162.4 72.8-162.4 162.4 0 28.8 7.2 56.8 20.8 81.6l-22.4 81.6 83.2-21.6c23.2 12.8 49.6 20 77.6 20 89.6 0 162.4-72.8 162.4-162.4 0-43.2-16.8-84-47.2-114.4zm-114.4 261.6c-25.6 0-50.4-6.4-72-18.4l-5.6-3.2-49.6 12.8 13.6-48-3.6-5.6c-12.8-21.6-19.2-46.4-19.2-72 0-78.4 63.2-142.4 142.4-142.4 38.4 0 74.4 15.2 101.6 42.4 27.2 27.2 42.4 63.2 42.4 101.6 0 78.4-63.2 142.4-142.4 142.4zm77.6-108.8c-4-2-23.2-11.2-26.8-12.8-3.6-1.6-6.4-2.4-9.2 2-2.8 4.4-10.8 12.8-13.2 15.2-2.4 2.4-4.8 2.8-8.8 1.2-4-1.6-16.8-6.2-32-19.8-11.8-10.4-19.8-23.2-22.2-27.2-2.4-4-0.2-6.2 1.8-8.2 1.8-1.8 4-4.8 6-7.2 2-2.4 2.6-4 4-6.8 1.2-2.8 0.6-5.2-0.2-7.2-.8-2-7.2-17.6-9.8-24.2-2.6-6.4-5.2-5.6-7.2-5.6-1.8 0-4-.2-6.2-.2s-5.6.8-8.6 4c-3 3.2-11.2 10.8-11.2 26.2 0 15.4 11.8 30.2 13.4 32.2 1.6 2 23.2 35.6 56.2 48.6 7.8 3.2 13.8 5.2 18.6 6.6 7.8 2.4 14.8 2 20.4 1.2 6.2-.8 19.2-7.8 21.8-15.4 2.6-7.6 2.6-14.2 1.8-15.4-.8-1.2-3.6-2-7.6-4z" fill="#fff"/></svg>
+      </a>
     </div>
     <button onclick="abrirLogin()">Admin</button>
   </div>
@@ -114,8 +115,12 @@
 <footer>
 <p>Siga-nos nas redes sociais</p>
 <div class="social-links">
-  <a href="https://www.instagram.com/seuinstagram" target="_blank" class="social-btn insta" title="Instagram"><i class="fab fa-instagram"></i></a>
-  <a href="https://wa.me/5511999999999" target="_blank" class="social-btn zap" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://www.instagram.com/seuinstagram" target="_blank" class="social-btn insta" title="Instagram" aria-label="Instagram">
+    <svg viewBox="0 0 448 448"><defs><radialGradient id="insta-gradient2" cx="30%" cy="107%" r="150%" fx="30%" fy="107%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect width="448" height="448" rx="90" fill="url(#insta-gradient2)"/><path d="M224 144a80 80 0 1 0 0 160 80 80 0 0 0 0-160zm124-24a28 28 0 1 1-56 0 28 28 0 0 1 56 0z" fill="#fff"/><circle cx="224" cy="224" r="64" fill="#fff"/></svg>
+  </a>
+  <a href="https://wa.me/5511999999999" target="_blank" class="social-btn zap" title="WhatsApp" aria-label="WhatsApp">
+    <svg viewBox="0 0 448 448"><circle cx="224" cy="224" r="224" fill="#25d366"/><path d="M337.6 110.4c-30.4-30.4-71-47.2-114.4-47.2-89.6 0-162.4 72.8-162.4 162.4 0 28.8 7.2 56.8 20.8 81.6l-22.4 81.6 83.2-21.6c23.2 12.8 49.6 20 77.6 20 89.6 0 162.4-72.8 162.4-162.4 0-43.2-16.8-84-47.2-114.4zm-114.4 261.6c-25.6 0-50.4-6.4-72-18.4l-5.6-3.2-49.6 12.8 13.6-48-3.6-5.6c-12.8-21.6-19.2-46.4-19.2-72 0-78.4 63.2-142.4 142.4-142.4 38.4 0 74.4 15.2 101.6 42.4 27.2 27.2 42.4 63.2 42.4 101.6 0 78.4-63.2 142.4-142.4 142.4zm77.6-108.8c-4-2-23.2-11.2-26.8-12.8-3.6-1.6-6.4-2.4-9.2 2-2.8 4.4-10.8 12.8-13.2 15.2-2.4 2.4-4.8 2.8-8.8 1.2-4-1.6-16.8-6.2-32-19.8-11.8-10.4-19.8-23.2-22.2-27.2-2.4-4-0.2-6.2 1.8-8.2 1.8-1.8 4-4.8 6-7.2 2-2.4 2.6-4 4-6.8 1.2-2.8 0.6-5.2-0.2-7.2-.8-2-7.2-17.6-9.8-24.2-2.6-6.4-5.2-5.6-7.2-5.6-1.8 0-4-.2-6.2-.2s-5.6.8-8.6 4c-3 3.2-11.2 10.8-11.2 26.2 0 15.4 11.8 30.2 13.4 32.2 1.6 2 23.2 35.6 56.2 48.6 7.8 3.2 13.8 5.2 18.6 6.6 7.8 2.4 14.8 2 20.4 1.2 6.2-.8 19.2-7.8 21.8-15.4 2.6-7.6 2.6-14.2 1.8-15.4-.8-1.2-3.6-2-7.6-4z" fill="#fff"/></svg>
+  </a>
 </div>
 </footer>
 
