@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" e-width, initial-scale=1.0">
 <title>Agenda de Sombrancelhas</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
@@ -61,7 +61,7 @@
         <svg viewBox="0 0 448 448"><circle cx="224" cy="224" r="224" fill="#25d366"/><path d="M337.6 110.4c-30.4-30.4-71-47.2-114.4-47.2-89.6 0-162.4 72.8-162.4 162.4 0 28.8 7.2 56.8 20.8 81.6l-22.4 81.6 83.2-21.6c23.2 12.8 49.6 20 77.6 20 89.6 0 162.4-72.8 162.4-162.4 0-43.2-16.8-84-47.2-114.4zm-114.4 261.6c-25.6 0-50.4-6.4-72-18.4l-5.6-3.2-49.6 12.8 13.6-48-3.6-5.6c-12.8-21.6-19.2-46.4-19.2-72 0-78.4 63.2-142.4 142.4-142.4 38.4 0 74.4 15.2 101.6 42.4 27.2 27.2 42.4 63.2 42.4 101.6 0 78.4-63.2 142.4-142.4 142.4zm77.6-108.8c-4-2-23.2-11.2-26.8-12.8-3.6-1.6-6.4-2.4-9.2 2-2.8 4.4-10.8 12.8-13.2 15.2-2.4 2.4-4.8 2.8-8.8 1.2-4-1.6-16.8-6.2-32-19.8-11.8-10.4-19.8-23.2-22.2-27.2-2.4-4-0.2-6.2 1.8-8.2 1.8-1.8 4-4.8 6-7.2 2-2.4 2.6-4 4-6.8 1.2-2.8 0.6-5.2-0.2-7.2-.8-2-7.2-17.6-9.8-24.2-2.6-6.4-5.2-5.6-7.2-5.6-1.8 0-4-.2-6.2-.2s-5.6.8-8.6 4c-3 3.2-11.2 10.8-11.2 26.2 0 15.4 11.8 30.2 13.4 32.2 1.6 2 23.2 35.6 56.2 48.6 7.8 3.2 13.8 5.2 18.6 6.6 7.8 2.4 14.8 2 20.4 1.2 6.2-.8 19.2-7.8 21.8-15.4 2.6-7.6 2.6-14.2 1.8-15.4-.8-1.2-3.6-2-7.6-4z" fill="#fff"/></svg>
       </a>
     </div>
-    <button onclick="abrirLogin()">Admin</button>
+    <button onclick="window.location.href='login.html'">Admin</button>
   </div>
 </header>
 
@@ -127,13 +127,10 @@
 <script>
 const calendarEl = document.getElementById("calendar");
 const selectHorario = document.getElementById("horario");
-const listaHorarios = document.getElementById("listaHorarios");
 const formAgendamento = document.getElementById("formAgendamento");
-const formAdmin = document.getElementById("formAdmin");
 const mensagem = document.getElementById("mensagem");
 const servicoSelect = document.getElementById("servico");
 const totalEl = document.getElementById("total");
-const filtroData = document.getElementById("filtroData");
 
 let horarios = JSON.parse(localStorage.getItem("horarios")) || [];
 let selectedDay = null;
@@ -161,62 +158,22 @@ function selecionarDia(div){
 }
 
 function atualizarHorarios(){
-  selectHorario.innerHTML="";
-  listaHorarios.innerHTML="";
-  const filtro = filtroData.value || selectedDay;
-  if(!filtro) return;
+  selectHorario.innerHTML = "";
+  if(!selectedDay) return;
 
-  const diaHorarios = horarios.filter(h=>h.data===filtro);
-  diaHorarios.forEach(h=>{
-    if(!h.reservado && filtro===selectedDay){
+  const diaHorarios = horarios.filter(h => h.data === selectedDay);
+  
+  diaHorarios.forEach(h => {
+    if(!h.reservado){
       let option = document.createElement("option");
       option.value = h.hora;
       option.textContent = h.hora;
       selectHorario.appendChild(option);
     }
-    let li = document.createElement("li");
-    li.innerHTML = `<strong>${h.data} ${h.hora}</strong> - ${h.reservado ? `${h.cliente.nome} (${h.servico})` : "Disponível"}`;
-    
-    let btns = document.createElement("div");
-    btns.classList.add("admin-btns");
-
-    if(h.reservado){
-      let btnZap = document.createElement("button");
-      btnZap.classList.add("btn-whatsapp");
-      btnZap.textContent = "WhatsApp";
-      btnZap.onclick = ()=>{ window.open(`https://wa.me/${h.cliente.telefone.replace(/\D/g,'')}`,"_blank"); };
-      
-      let btnEdit = document.createElement("button");
-      btnEdit.classList.add("btn-edit");
-      btnEdit.textContent = "Editar";
-      btnEdit.onclick = ()=>editarAgendamento(h);
-      
-      let btnDel = document.createElement("button");
-      btnDel.classList.add("btn-delete");
-      btnDel.textContent = "Excluir";
-      btnDel.onclick = ()=>excluirAgendamento(h);
-
-      btns.appendChild(btnZap);
-      btns.appendChild(btnEdit);
-      btns.appendChild(btnDel);
-    } else {
-      let btnRemove = document.createElement("button");
-      btnRemove.classList.add("btn-delete");
-      btnRemove.textContent = "Remover";
-      btnRemove.onclick = ()=>{
-        if(confirm(`Deseja remover o horário ${h.data} ${h.hora}?`)){
-          horarios = horarios.filter(x => !(x.data===h.data && x.hora===h.hora));
-          atualizarHorarios();
-        }
-      };
-      btns.appendChild(btnRemove);
-    }
-
-    li.appendChild(btns);
-    listaHorarios.appendChild(li);
   });
+  
   calcularTotal();
-  localStorage.setItem("horarios",JSON.stringify(horarios));
+  localStorage.setItem("horarios", JSON.stringify(horarios));
 }
 
 formAgendamento.addEventListener("submit",(e)=>{
@@ -246,64 +203,16 @@ formAgendamento.addEventListener("submit",(e)=>{
   formAgendamento.reset();
 });
 
-formAdmin.addEventListener("submit",(e)=>{
-  e.preventDefault();
-  const novaData = document.getElementById("novaData").value;
-  const novoHorario = document.getElementById("novoHorario").value;
-
-  if(!novaData){ alert("Selecione uma data!"); return; }
-
-  const hoje = new Date();
-  hoje.setHours(0,0,0,0);
-  const limite = new Date();
-  limite.setDate(hoje.getDate()+30);
-  const dataEscolhida = new Date(novaData);
-  if(dataEscolhida < hoje || dataEscolhida > limite){
-    alert("⚠️ Só é permitido cadastrar datas até 30 dias a partir de hoje.");
-    return;
-  }
-
-  if(novoHorario && !horarios.some(h=>h.data===novaData && h.hora===novoHorario)){
-    horarios.push({data:novaData,hora:novoHorario,reservado:false});
-  } else {
-    alert("⚠️ Esse horário já existe para a data escolhida.");
-  }
-
-  atualizarHorarios();
-  formAdmin.reset();
-});
-
-filtroData.addEventListener("change",atualizarHorarios);
-
-function abrirLogin(){
-  let senha=prompt("Digite a senha de administrador:");
-  if(senha==="1234"){document.getElementById("adminPanel").style.display="block"}
-  else{alert("Senha incorreta!")}
-}
-
 function calcularTotal(){
   const servico = servicoSelect.value;
   const valor = servico==="henna"?40:25;
   totalEl.textContent=`Total: R$${valor}`;
 }
 
-function excluirAgendamento(h){
-  if(confirm("Deseja excluir este agendamento?")){
-    h.reservado=false;
-    h.cliente=null;
-    h.servico=null;
-    atualizarHorarios();
-  }
-}
-
-function editarAgendamento(h){
-  const novoNome = prompt("Nome do cliente:", h.cliente.nome);
-  const novoTel = prompt("Telefone:", h.cliente.telefone);
-  if(novoNome && novoTel){
-    h.cliente.nome = novoNome;
-    h.cliente.telefone = novoTel;
-    atualizarHorarios();
-  }
+function calcularTotal(){
+  const servico = servicoSelect.value;
+  const valor = servico==="henna"?40:25;
+  totalEl.textContent=`Total: R$${valor}`;
 }
 
 criarCalendario();
