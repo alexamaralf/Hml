@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin - Studio Sombrancelhas</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Poppins,Arial,sans-serif;background:linear-gradient(180deg,#fff6f8,#ffeef2);color:#4a3b3b;display:flex;flex-direction:column;min-height:100vh}
+  
+  header{background:#e8a0b3;color:white;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+  header h1{font-size:2rem;font-weight:700;letter-spacing:1px;}
+  .header-actions{display:flex;align-items:center;gap:20px}
+  .sair-btn{background:none;border:2px solid white;color:white;padding:8px 20px;border-radius:25px;cursor:pointer;transition:.3s}
+  .sair-btn:hover{background:white;color:#e8a0b3}
+  
+  .container{flex:1;padding:2rem 1.5rem;max-width:800px;margin:auto;width:100%}
+  h2{text-align:center;margin-bottom:1.5rem;color:#c44f71;font-size:1.6rem;letter-spacing:.5px;}
+  
+  .card{background:white;border-radius:18px;padding:2rem;box-shadow:0 6px 24px rgba(200,79,113,0.08);margin-bottom:2rem}
+  input, button{width:100%;padding:.9rem;margin:.7rem 0;border:1.5px solid #e8a0b3;border-radius:14px;font-size:1.05rem;transition:.3s}
+  input:focus{outline:none;border-color:#c44f71;box-shadow:0 0 8px #e8a0b355}
+  button{background:linear-gradient(90deg,#e8a0b3,#c44f71);color:white;font-weight:600;border:none;transition:.3s;box-shadow:0 2px 8px rgba(200,79,113,0.08)}
+  button:hover{background:linear-gradient(90deg,#c44f71,#e8a0b3);cursor:pointer}
+  
+  .filtro-data{margin-bottom:1.5rem}
+  ul{list-style:none;margin-top:1rem;padding:0}
+  li{background:#fff;padding:1rem;margin:.5rem 0;border-radius:10px;font-size:1rem;box-shadow:0 2px 8px rgba(200,79,113,0.04);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  li:hover{background:#fff3f6}
+  
+  .admin-btns{display:flex;gap:8px;flex-wrap:wrap}
+  .admin-btns button{width:auto;margin:0;padding:8px 15px;font-size:.9rem}
+  .btn-edit{background:#f7c948}
+  .btn-delete{background:#e57373}
+  .btn-whatsapp{background:#25d366}
+  
+  @media (max-width: 600px) {
+    li{flex-direction:column;align-items:flex-start;gap:15px}
+    .admin-btns{width:100%;justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Studio Sombrancelhas</h1>
+  <div class="header-actions">
+    <button class="sair-btn" onclick="sair()">Sair</button>
+  </div>
+</header>
+
+<div class="container">
+  <h2>Painel Administrativo</h2>
+  <div class="card">
+    <form id="formAdmin">
+      <label for="novaData">Escolha a data:</label>
+      <input type="date" id="novaData" required>
+
+      <label for="novoHorario">Adicionar horário:</label>
+      <input type="time" id="novoHorario" required>
+
+      <button type="submit">Adicionar Horário</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="filtro-data">
+      <label for="filtroData">Filtrar por data:</label>
+      <input type="date" id="filtroData">
+    </div>
+
+    <h3 style="color:#c44f71;margin-bottom:1rem">Horários e Reservas:</h3>
+    <ul id="listaHorarios"></ul>
+  </div>
+</div>
+
+<script>
+// Verificação de autenticação
+if(!localStorage.getItem("adminLogado")){
+  window.location.href = "login.html";
+}
+
+const listaHorarios = document.getElementById("listaHorarios");
+const formAdmin = document.getElementById("formAdmin");
+const filtroData = document.getElementById("filtroData");
+
+let horarios = JSON.parse(localStorage.getItem("horarios")) || [];
+
+function atualizarHorarios(){
+  listaHorarios.innerHTML = "";
+  const filtro = filtroData.value;
+  
+  const horariosOrdenados = [...horarios].sort((a,b) => {
+    return new Date(a.data + 'T' + a.hora) - new Date(b.data + 'T' + b.hora);
+  });
+
+  const diaHorarios = filtro ? 
+    horariosOrdenados.filter(h => h.data === filtro) : 
+    horariosOrdenados;
+
+  if(diaHorarios.length === 0){
+    listaHorarios.innerHTML = "<p style='text-align:center;color:#777'>Nenhum horário encontrado</p>";
+    return;
+  }
+
+  diaHorarios.forEach(h => {
+    let li = document.createElement("li");
+    li.innerHTML = `
+      <div>
+        <strong>${formatarData(h.data)} ${h.hora}</strong>
+        ${h.reservado ? `<br>Cliente: ${h.cliente.nome}<br>Serviço: ${h.servico}` : " - Disponível"}
+      </div>`;
+    
+    let btns = document.createElement("div");
+    btns.classList.add("admin-btns");
+
+    if(h.reservado){
+      let btnZap = document.createElement("button");
+      btnZap.classList.add("btn-whatsapp");
+      btnZap.textContent = "WhatsApp";
+      btnZap.onclick = () => {
+        window.open(`https://wa.me/${h.cliente.telefone.replace(/\D/g,'')}`, "_blank");
+      };
+      
+      let btnEdit = document.createElement("button");
+      btnEdit.classList.add("btn-edit");
+      btnEdit.textContent = "Editar";
+      btnEdit.onclick = () => editarAgendamento(h);
+      
+      let btnDel = document.createElement("button");
+      btnDel.classList.add("btn-delete");
+      btnDel.textContent = "Excluir";
+      btnDel.onclick = () => excluirAgendamento(h);
+
+      btns.appendChild(btnZap);
+      btns.appendChild(btnEdit);
+      btns.appendChild(btnDel);
+    } else {
+      let btnRemove = document.createElement("button");
+      btnRemove.classList.add("btn-delete");
+      btnRemove.textContent = "Remover";
+      btnRemove.onclick = () => {
+        if(confirm(`Deseja remover o horário ${h.data} ${h.hora}?`)){
+          horarios = horarios.filter(x => !(x.data === h.data && x.hora === h.hora));
+          salvarHorarios();
+          atualizarHorarios();
+        }
+      };
+      btns.appendChild(btnRemove);
+    }
+
+    li.appendChild(btns);
+    listaHorarios.appendChild(li);
+  });
+}
+
+formAdmin.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const novaData = document.getElementById("novaData").value;
+  const novoHorario = document.getElementById("novoHorario").value;
+
+  if(!novaData){
+    alert("Selecione uma data!");
+    return;
+  }
+
+  const hoje = new Date();
+  hoje.setHours(0,0,0,0);
+  const limite = new Date();
+  limite.setDate(hoje.getDate() + 30);
+  const dataEscolhida = new Date(novaData);
+
+  if(dataEscolhida < hoje || dataEscolhida > limite){
+    alert("⚠️ Só é permitido cadastrar datas até 30 dias a partir de hoje.");
+    return;
+  }
+
+  if(novoHorario && !horarios.some(h => h.data === novaData && h.hora === novoHorario)){
+    horarios.push({
+      data: novaData,
+      hora: novoHorario,
+      reservado: false
+    });
+    salvarHorarios();
+    atualizarHorarios();
+    formAdmin.reset();
+  } else {
+    alert("⚠️ Esse horário já existe para a data escolhida.");
+  }
+});
+
+function formatarData(data){
+  return new Date(data).toLocaleDateString('pt-BR');
+}
+
+function excluirAgendamento(h){
+  if(confirm("Deseja excluir este agendamento?")){
+    h.reservado = false;
+    h.cliente = null;
+    h.servico = null;
+    salvarHorarios();
+    atualizarHorarios();
+  }
+}
+
+function editarAgendamento(h){
+  const novoNome = prompt("Nome do cliente:", h.cliente.nome);
+  const novoTel = prompt("Telefone:", h.cliente.telefone);
+  if(novoNome && novoTel){
+    h.cliente.nome = novoNome;
+    h.cliente.telefone = novoTel;
+    salvarHorarios();
+    atualizarHorarios();
+  }
+}
+
+function salvarHorarios(){
+  localStorage.setItem("horarios", JSON.stringify(horarios));
+}
+
+function sair(){
+  localStorage.removeItem("adminLogado");
+  window.location.href = "index.html";
+}
+
+filtroData.addEventListener("change", atualizarHorarios);
+
+// Inicializar
+atualizarHorarios();
+</script>
+
+</body>
+</html>
